@@ -71,6 +71,65 @@ test('Update topping total when toppings change', async () => {
     expect(toppingsSubtotal).toHaveTextContent('1.50');
 });
 
+test.only('No scoop subtotal update for invalid input', async () => {
+    // Render Options wioth prop "scoops", it is wrapped in OrderProvider for subtotals
+    render(<Options optionType="scoops" />);
+
+    // scoops are fetched from server ==> async
+    //BEHAVIOR
+
+    // Scoop subtotal starts at 0 (maybe no need to check this)
+    const scoopsSubtotal = screen.getByText(
+        'Scoops total: $',
+        { exact: false }
+    );
+    expect(scoopsSubtotal).toHaveTextContent('0.00');
+
+    // Get the inputs
+    const vanillaInput = await screen.findByRole(
+        'spinbutton',
+        { name: 'Vanilla' }
+    );
+    const chocolateInput = await screen.findByRole(
+        'spinbutton',
+        { name: 'Chocolate' }
+    );
+
+    // Add a negative number of scoops
+
+    console.log('--- CLEAR ---');
+    await userEvent.clear(vanillaInput);
+    console.log('--- TYPE -2 ---');
+    await userEvent.type(vanillaInput, '-2');
+
+    // Check that scoop total is 0
+    expect(scoopsSubtotal).toHaveTextContent('0.00');
+
+    // Add a decimal number
+    // console.log('--- CLEAR ---');
+    // await userEvent.clear(chocolateInput);
+    // console.log('--- TYPE 1.5 ---');
+    // await userEvent.type(chocolateInput, '1.5');
+
+    // // Check that scoop total is 2.00 ==> Since they type 1 before typing .5, the total should update partially
+    // expect(scoopsSubtotal).toHaveTextContent('0.00');
+
+    // // Add  number greater than 10
+    // await userEvent.clear(vanillaInput);
+    // await userEvent.clear(chocolateInput);
+    // await userEvent.type(vanillaInput, '10');
+
+    // // Check that scoop total is 0
+    // expect(scoopsSubtotal).toHaveTextContent('0.00');
+
+    // // Add a valid number of scoops
+    // await userEvent.clear(vanillaInput);
+    // await userEvent.type(vanillaInput, '2');
+
+    // // Check that subtotal updates
+    // expect(scoopsSubtotal).toHaveTextContent('4.00');
+});
+
 describe('Grand total', () => {
     test('Grand total starts at 0.00 and updates properly if scoop is added first', async () => {
         // We test both here to get rid of  the warning

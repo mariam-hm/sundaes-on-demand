@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import Options from './Options';
 import { formatCurrency } from '../../utilities';
 import { useOrderDetails } from '../../contexts/OrderDetails';
@@ -20,6 +21,9 @@ function OrderEntry({ setOrderPhase }) {
             <Button
                 variant="light"
                 onClick={() => setOrderPhase('review')}
+                disabled={
+                    totals['scoops'] > 0 ? false : true
+                }
             >
                 Order sundae!
             </Button>

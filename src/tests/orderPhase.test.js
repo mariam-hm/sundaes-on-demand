@@ -105,7 +105,7 @@ test('Order phases for happy path', async () => {
     });
     await userEvent.click(newOrderBtn);
 
-    // Check that scoops and topping subtotals habe been reset
+    // Check that scoops and topping subtotals have been reset
 
     const scoopsSubtotal = await screen.getByText(
         'Scoops total: $0.00'

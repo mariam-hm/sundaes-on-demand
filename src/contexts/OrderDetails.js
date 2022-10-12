@@ -18,8 +18,8 @@ export function useOrderDetails() {
 
 export function OrderDetailsProvider(props) {
     const [optionCounts, setOptionCounts] = useState({
-        scoops: {}, // { Chocolate: 1, Vanilla: 2 }
-        toppings: {},
+        scoops: {}, // { 'Chocolate': 1, 'Vanilla': 2 }
+        toppings: {}, // { 'Cherries', 'M&Ms' }
     });
 
     function updateItemCount(

@@ -2,18 +2,45 @@ import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import { useState } from 'react';
 
 import { useOrderDetails } from '../../contexts/OrderDetails';
 
 export default function ScoopOption({ name, imagePath }) {
     const { updateItemCount } = useOrderDetails();
+    const [isValid, setIsValid] = useState(false);
 
-    const handleChange = (e) =>
-        updateItemCount(
-            name,
-            parseInt(e.target.value),
-            'scoops'
+    const handleChange = (e) => {
+        const currentValue = e.target.value;
+        const currentValueFloat = parseFloat(currentValue);
+
+        const valueIsValid =
+            0 <= currentValueFloat &&
+            currentValueFloat <= 10 &&
+            Math.floor(currentValueFloat) ===
+                currentValueFloat;
+
+        setIsValid(valueIsValid);
+
+        console.log(
+            '---------- VALUE: ' +
+                currentValueFloat +
+                '   ---------- IS VALID: ' +
+                valueIsValid
         );
+
+        if (valueIsValid) {
+            console.log(
+                'ENTER UPDATE TOTAL WITH: ' +
+                    parseInt(e.target.value)
+            );
+            updateItemCount(
+                name,
+                parseInt(e.target.value),
+                'scoops'
+            );
+        }
+    };
 
     return (
         <Col
@@ -29,6 +56,7 @@ export default function ScoopOption({ name, imagePath }) {
                 alt={`${name} scoop`}
             />
             <Form.Group
+                noValidate
                 controlId={`${name}-count`}
                 as={Row}
                 style={{ marginTop: '10px' }}
@@ -45,6 +73,10 @@ export default function ScoopOption({ name, imagePath }) {
                         type="number"
                         defaultValue={0}
                         onChange={handleChange}
+                        isInvalid={!isValid}
+                        step="1"
+                        max="10"
+                        min="0"
                     />
                 </Col>
             </Form.Group>
