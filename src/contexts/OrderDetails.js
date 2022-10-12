@@ -39,7 +39,7 @@ export function OrderDetailsProvider(props) {
     }
 
     function resetOrder() {
-        setOptionsCounts({ scoops: {}, toppings: {} });
+        setOptionCounts({ scoops: {}, toppings: {} });
     }
 
     // utility function
